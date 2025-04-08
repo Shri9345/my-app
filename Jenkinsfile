@@ -38,7 +38,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'echo "Deploy step goes here"'
-                // Add deploy steps if needed
+                // Add deployment commands here if needed
             }
         }
     }
@@ -46,9 +46,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up...'
-            node {
-                sh 'docker system prune -f'
-            }
+            sh 'docker system prune -f'
         }
         failure {
             echo 'Pipeline failed!'
