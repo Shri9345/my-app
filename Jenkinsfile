@@ -2,54 +2,59 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'my-python-app'
-        DOCKERHUB_USER = 'shripatil2001'
+        IMAGE_NAME = "shri9345/my-app"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Replace with your credential ID
     }
 
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/Shri9345/my-app.git'
+                git branch: 'main', url: 'https://github.com/Shri9345/my-app.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building Docker image...'
+                echo "Building Docker image..."
                 sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing the app...'
-                // Add your test command (dummy for now)
-                sh 'echo "Tests Passed!"'
+                echo "Running container to test app..."
+                sh 'docker run --rm $IMAGE_NAME'
             }
         }
 
         stage('Push to DockerHub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                echo "Pushing Docker image to DockerHub..."
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
-                    sh 'docker tag $IMAGE_NAME $DOCKERHUB_USER/$IMAGE_NAME:latest'
-                    sh 'docker push $DOCKERHUB_USER/$IMAGE_NAME:latest'
+                    sh 'docker push $IMAGE_NAME'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying app...'
-                sh 'docker run -d -p 5000:5000 $DOCKERHUB_USER/$IMAGE_NAME:latest'
+                echo "Deploying application..."
+                // Add deployment commands here, e.g., docker run or kubectl apply
             }
         }
     }
 
     post {
         always {
-            echo 'Cleaning up...'
+            echo "Cleaning up..."
             sh 'docker system prune -f'
+        }
+        failure {
+            echo "Pipeline failed!"
+        }
+        success {
+            echo "Pipeline completed successfully!"
         }
     }
 }
