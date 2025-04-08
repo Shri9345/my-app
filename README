@@ -1,0 +1,26 @@
+# CI/CD Pipeline for Flask App 🚀
+
+This project demonstrates a CI/CD pipeline using **Jenkins**, **Docker**, and **GitHub**.
+
+## 🔧 Tools Used
+- Jenkins
+- Docker & DockerHub
+- GitHub
+- Flask (Python 3.9)
+
+## ⚙️ What This Does
+- Builds a Docker image from this repo using Jenkins
+- Runs tests (dummy for now)
+- Pushes the image to DockerHub: `shripatil2001/my-app`
+- Echoes a deploy step (can be replaced with a real deployment script)
+
+## Screenshot
+![Pipeline Success](screenshots/pipeline-success.png)
+
+## DockerHub Repo
+ [DockerHub - shripatil2001/my-app](https://hub.docker.com/r/shripatil2001/my-app)
+
+##  Run It Locally
+```bash
+docker pull shripatil2001/my-app:latest
+docker run -d -p 5000:5000 shripatil2001/my-app
