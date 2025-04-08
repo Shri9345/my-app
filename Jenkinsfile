@@ -3,13 +3,13 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'my-python-app'
-        DOCKERHUB_USER = 'your-dockerhub-username'
+        DOCKERHUB_USER = 'shripatil2001'
     }
 
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/your-username/your-repo.git'
+                git 'https://github.com/Shri9345/my-app.git'
             }
         }
 
