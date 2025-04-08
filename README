@@ -14,6 +14,19 @@ This project demonstrates a CI/CD pipeline using **Jenkins**, **Docker**, and **
 - Pushes the image to DockerHub: `shripatil2001/my-app`
 - Echoes a deploy step (can be replaced with a real deployment script)
 
+Final Outcome:
+Jenkins Pipeline 
+
+Docker Image Built 
+
+Docker Image Pushed 
+
+Placeholder Deploy Step 
+
+Cleanup 
+
+
+
 ## Screenshot
 ![Pipeline Success](screenshots/pipeline-success.png)
 
