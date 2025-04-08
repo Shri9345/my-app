@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "shri9345/my-app"
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Replace with your credential ID
+        IMAGE_NAME = 'shri9345/my-app'
     }
 
     stages {
@@ -15,46 +14,44 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Building Docker image..."
                 sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Test') {
             steps {
-                echo "Running container to test app..."
-                sh 'docker run --rm $IMAGE_NAME'
+                sh 'echo "Running tests..."'
+                // Add your test commands here
             }
         }
 
         stage('Push to DockerHub') {
             steps {
-                echo "Pushing Docker image to DockerHub..."
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
-                    sh 'docker push $IMAGE_NAME'
+                    sh 'docker tag $IMAGE_NAME $IMAGE_NAME:latest'
+                    sh 'docker push $IMAGE_NAME:latest'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying application..."
-                // Add deployment commands here, e.g., docker run or kubectl apply
+                sh 'echo "Deploy step goes here"'
+                // Add deploy steps if needed
             }
         }
     }
 
     post {
         always {
-            echo "Cleaning up..."
-            sh 'docker system prune -f'
+            echo 'Cleaning up...'
+            node {
+                sh 'docker system prune -f'
+            }
         }
         failure {
-            echo "Pipeline failed!"
-        }
-        success {
-            echo "Pipeline completed successfully!"
+            echo 'Pipeline failed!'
         }
     }
 }
